@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     public void testCorrectlyFormattedUsername() {
         login user = new login();
-        user.setUserName("buhle");
+        user.setUserName("buhle");//setting example username
         assertTrue(user.checkUserName());
     }
 
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     public void testPasswordMeetsComplexity() {
         login user = new login();
-        user.setUserPassword("Sinothando_12pp0");
+        user.setUserPassword("Sinothando_12pp0");//example password to test
         assertTrue(user.checkPasswordComplexity());
     }
 
@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     public void testCellPhoneNumberValid() {
         login user = new login();
-        user.setPhoneNumber("2783123456");
+        user.setPhoneNumber("2783123456");// example phone number
         assertTrue(user.checkCellPhoneNumber());
     }
 
