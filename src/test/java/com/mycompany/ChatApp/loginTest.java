@@ -15,21 +15,21 @@ import static org.junit.jupiter.api.Assertions.*;
     @Test
     public void testCorrectlyFormattedUsername() {
         login user = new login();
-        user.setUserName("kyl_1");
+        user.setUserName("buhle");
         assertTrue(user.checkUserName());
     }
 
     @Test
     public void testIncorrectlyFormattedUsername() {
         login user = new login();
-        user.setUserName("kyle!!!!!!!");
+        user.setUserName("buhle!!!!!!!");
         assertFalse(user.checkUserName());
     }
 
     @Test
     public void testPasswordMeetsComplexity() {
         login user = new login();
-        user.setUserPassword("Ch&&sec@ke99!");
+        user.setUserPassword("Sinothando_12pp0");
         assertTrue(user.checkPasswordComplexity());
     }
 
@@ -54,29 +54,29 @@ import static org.junit.jupiter.api.Assertions.*;
         assertFalse(user.checkCellPhoneNumber());
     }
 
-    @Test
+   @Test
     public void testLoginSuccessStatus() {
         login user = new login();
-        user.setFirstName("Kyle");
+        user.setFirstName("buhle");
         user.setLastName("FirstName");
-        user.setUserName("kyl_1");
-        user.setUserPassword("Ch&&sec@ke99!");
+        user.setUserName("buh_le");
+        user.setUserPassword("Sinothando_12pp0");
         
-        user.setSavedUsername("kyl_1");
-        user.setSavedPassword("Ch&&sec@ke99!");
+        user.setSavedUsername("buh_le");
+        user.setSavedPassword("Sinothando_12pp0");
         
         assertTrue(user.loginUser());
-        assertEquals("Welcome Kyle, FirstName it is great to see you again.", user.returnLoginStatus());
+        assertEquals("Welcome Buhle, FirstName it is great to see you again.", user.returnLoginStatus());
     }
 
     @Test
     public void testLoginFailureStatus() {
         login user = new login();
-        user.setUserName("kyl_1");
-        user.setUserPassword("Ch&&sec@ke99!");
+        user.setUserName("buh_le");
+        user.setUserPassword("Sinothando_12pp0");
         
-        user.setSavedUsername("kyl_1");
-        user.setSavedPassword("wrongPassword");
+        user.setSavedUsername("buh_le");
+        user.setSavedPassword("Sinothando_12pp0");
         
         assertFalse(user.loginUser());
         assertEquals("Username or password incorrect, please try again.", user.returnLoginStatus());

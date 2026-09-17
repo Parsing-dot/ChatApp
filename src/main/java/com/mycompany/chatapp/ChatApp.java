@@ -3,12 +3,13 @@
  */
 
 package com.mycompany.chatapp;
+import java.util.Scanner;
 
 /**
  *
  * @author Zanele
  */
-import java.util.Scanner;
+
 
 public class ChatApp {
 
