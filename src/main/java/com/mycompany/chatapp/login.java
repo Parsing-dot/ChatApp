@@ -10,7 +10,7 @@ package com.mycompany.chatapp;
  */
 public class login {
 
-    // Variables with main Registration & User Profile Fields
+    // Variables for main Registration 
     private String firstName;
     private String lastName;
     private String userName;

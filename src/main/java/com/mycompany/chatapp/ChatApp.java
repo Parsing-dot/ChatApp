@@ -20,7 +20,7 @@ public class ChatApp {
         System.out.println("   WELCOME TO THE REGISTRATION SYSTEM    ");
         System.out.println("/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/`~/");
 
-        // 1. Capture User Personal Details
+        // Save the pernal details
         System.out.print("Enter First Name: ");
         userLogin.setFirstName(scanner.nextLine());
 
@@ -39,7 +39,7 @@ public class ChatApp {
             return;
         }
 
-        // 2. Registration Input Loop
+        // registration logic
         boolean isRegisteredSuccessfully = false;
 
         while (!isRegisteredSuccessfully) {
@@ -65,7 +65,7 @@ public class ChatApp {
             }
         }
 
-        // 3. Login Loop
+        // login loop
         System.out.println("\n/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/`~/");
         System.out.println("               LOGIN SYSTEM              ");
         System.out.println("/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/`~/");
