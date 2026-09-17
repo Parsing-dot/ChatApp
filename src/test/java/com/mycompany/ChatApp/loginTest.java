@@ -3,14 +3,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.chatapp;
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author Zanele
- */public class loginTest {
+ */
+public class loginTest {
 
     @Test
     public void testCorrectlyFormattedUsername() {
@@ -54,7 +54,7 @@ import static org.junit.jupiter.api.Assertions.*;
         assertFalse(user.checkCellPhoneNumber());
     }
 
-   @Test
+    @Test
     public void testLoginSuccessStatus() {
         login user = new login();
         user.setFirstName("buhle");
@@ -74,7 +74,6 @@ import static org.junit.jupiter.api.Assertions.*;
         login user = new login();
         user.setUserName("buh_le");
         user.setUserPassword("Sinothando_12pp0");
-        
         user.setSavedUsername("buh_le");
         user.setSavedPassword("Sinothando_12pp0");
         
