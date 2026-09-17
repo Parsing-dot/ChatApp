@@ -10,7 +10,6 @@ import java.util.Scanner;
  * @author Zanele
  */
 
-
 public class ChatApp {
 
     public static void main(String[] args) {
