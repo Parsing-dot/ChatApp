@@ -4,131 +4,167 @@
  */
 package com.mycompany.chatapp;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Random;
+import java.util.Scanner;
 
-public class Message {
+public class ChatApp {
 
-    private String messageId;
-    private int messageNumber;
-    private String recipientCell;
-    private String messageText;
-    private String messageHash;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        login userLogin = new login();
 
-    // Constructor
-    public Message(int messageNumber, String recipientCell, String messageText) {
-        this.messageNumber = messageNumber;
-        this.recipientCell = recipientCell;
-        this.messageText = messageText;
-        this.messageId = generateMessageID();
-        this.messageHash = createMessageHash();
-    }
+        System.out.println("/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/`~/");
+        System.out.println("    WELCOME TO THE REGISTRATION SYSTEM    ");
+        System.out.println("/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/~/`~/");
 
-    // Default Constructor
-    public Message() {}
+        // 1. Capture Registration Details
+        System.out.print("Enter First Name: ");
+        userLogin.setFirstName(scanner.nextLine());
 
-    // 1. Generate Random 10-digit Message ID
-    public String generateMessageID() {
-        Random rand = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            sb.append(rand.nextInt(10));
+        System.out.print("Enter Last Name: ");
+        userLogin.setLastName(scanner.nextLine());
+
+        System.out.print("Do you accept the Terms and Conditions? (yes/no): ");
+        if (!scanner.nextLine().equalsIgnoreCase("yes")) {
+            System.out.println("You must accept terms to register. Exiting program.");
+            scanner.close();
+            return;
         }
-        return sb.toString();
-    }
 
-    // 2. Check Message ID (Max 10 Chars)
-    public boolean checkMessageID() {
-        return messageId != null && messageId.length() <= 10;
-    }
+        boolean isRegistered = false;
+        while (!isRegistered) {
+            System.out.println("\n--- REGISTRATION ---");
+            System.out.print("Enter Username: ");
+            userLogin.setUserName(scanner.nextLine());
 
-    // 3. Check Recipient Cell Number (Max 10 Chars, Starts with code)
-    public String checkRecipientCell(String recipient) {
-        // Reusing SA phone validation rules (+27 / 27)
-        String saPhoneRegex = "^(\\+27|27)[0-9]{8,9}$";
-        if (recipient != null && recipient.matches(saPhoneRegex) && recipient.length() <= 10) {
-            return "Cell phone number successfully captured.";
-        } else {
-            return "Cell phone number is incorrectly formatted or does not contain an international code. Please correct the number and try again.";
+            System.out.print("Enter Password: ");
+            userLogin.setUserPassword(scanner.nextLine());
+
+            System.out.print("Enter South African Cell Phone Number (e.g. 2783123456): ");
+            userLogin.setPhoneNumber(scanner.nextLine());
+
+            System.out.println("\n" + userLogin.registerUser());
+            if (userLogin.checkUserName() && userLogin.checkPasswordComplexity() && userLogin.checkCellPhoneNumber()) {
+                isRegistered = true;
+            } else {
+                System.out.println("Please try registering again with valid details.");
+            }
         }
-    }
 
-    // 4. Check Message Length (Max 250 Chars)
-    public String validateMessageLength(String message) {
-        if (message != null && message.length() <= 250) {
-            return "Message ready to send.";
-        } else {
-            int excess = message.length() - 250;
-            return "Message exceeds 250 characters by " + excess + "; please reduce the size.";
+        // 2. Login Flow
+        System.out.println("\n=========================================");
+        System.out.println("               LOGIN SYSTEM              ");
+        System.out.println("=========================================");
+
+        boolean isLoggedIn = false;
+        while (!userLogin.isLoginLimitMet() && !isLoggedIn) {
+            System.out.println("\n--- LOGIN ---");
+            System.out.print("Enter Username: ");
+            userLogin.setSavedUsername(scanner.nextLine());
+
+            System.out.print("Enter Password: ");
+            userLogin.setSavedPassword(scanner.nextLine());
+
+            isLoggedIn = userLogin.loginUser();
+            System.out.println("\n" + userLogin.returnLoginStatus());
         }
-    }
 
-    // 5. Create Message Hash (Format: 00:0:HITHANKS in ALL CAPS)
-    public String createMessageHash() {
-        if (messageId == null || messageText == null || messageText.trim().isEmpty()) {
-            return "";
+        // 3. QuickChat Application Loop (Requires Successful Login)
+        if (isLoggedIn) {
+            System.out.println("\nWelcome to QuickChat.");
+            boolean running = true;
+            int totalSentAccumulator = 0;
+
+            while (running) {
+                System.out.println("\n--- MENU ---");
+                System.out.println("1) Send Messages");
+                System.out.println("2) Show recently sent messages");
+                System.out.println("3) Quit");
+                System.out.print("Choose an option: ");
+
+                String inputChoice = scanner.nextLine();
+                int option = 0;
+                try {
+                    option = Integer.parseInt(inputChoice);
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid numeric option.");
+                    continue;
+                }
+
+                switch (option) {
+                    case 1:
+                        System.out.print("How many messages do you wish to enter?: ");
+                        int numMessages = Integer.parseInt(scanner.nextLine());
+
+                        for (int i = 0; i < numMessages; i++) {
+                            System.out.println("\n--- Message " + (i + 1) + " of " + numMessages + " ---");
+
+                            // Recipient Validation
+                            String recipient = "";
+                            Message msgValidator = new Message();
+                            while (true) {
+                                System.out.print("Enter Recipient Cell Number: ");
+                                recipient = scanner.nextLine();
+                                String recStatus = msgValidator.checkRecipientCell(recipient);
+                                System.out.println(recStatus);
+                                if (recStatus.equals("Cell phone number successfully captured.")) {
+                                    break;
+                                }
+                            }
+
+                            // Message Length Validation
+                            String text = "";
+                            while (true) {
+                                System.out.print("Enter Message (Max 250 chars): ");
+                                text = scanner.nextLine();
+                                String msgStatus = msgValidator.validateMessageLength(text);
+                                System.out.println(msgStatus);
+                                if (msgStatus.equals("Message ready to send.")) {
+                                    break;
+                                }
+                            }
+
+                            // Construct Message
+                            Message msg = new Message(i + 1, recipient, text);
+
+                            // Send/Store/Disregard Options
+                            System.out.println("\nChoose Action:");
+                            System.out.println("1) Store Message in a JSON file / Send");
+                            System.out.println("2) Disregard Message");
+                            System.out.println("3) Store Message to send later");
+                            System.out.print("Select: ");
+                            int actionChoice = Integer.parseInt(scanner.nextLine());
+
+                            String actionResult = msg.SentMessage(actionChoice);
+                            System.out.println(actionResult);
+
+                            if (actionChoice == 1) {
+                                totalSentAccumulator++;
+                            }
+
+                            // Display Full Message Details
+                            System.out.println("\n--- MESSAGE DETAILS ---");
+                            System.out.println(msg.printMessages());
+                        }
+
+                        System.out.println("\nTotal messages sent in this session: " + totalSentAccumulator);
+                        break;
+
+                    case 2:
+                        System.out.println("Coming Soon.");
+                        break;
+
+                    case 3:
+                        running = false;
+                        System.out.println("Thank you for using QuickChat. Goodbye!");
+                        break;
+
+                    default:
+                        System.out.println("Invalid menu option. Please choose 1, 2, or 3.");
+                        break;
+                }
+            }
         }
-        
-        // Extract first 2 digits of Message ID
-        String firstTwoDigits = messageId.length() >= 2 ? messageId.substring(0, 2) : "00";
-        
-        // Extract first and last words
-        String[] words = messageText.trim().split("\\s+");
-        String firstWord = words[0].replaceAll("[^a-zA-Z0-9]", "");
-        String lastWord = words[words.length - 1].replaceAll("[^a-zA-Z0-9]", "");
-        
-        String hash = firstTwoDigits + ":" + messageNumber + ":" + firstWord + lastWord;
-        return hash.toUpperCase();
+
+        scanner.close();
     }
-
-    // 6. Handle Send Message Action Options
-    public String SentMessage(int choice) {
-        switch (choice) {
-            case 1:
-                return "Message successfully sent.";
-            case 2:
-                return "Press O to delete the message.";
-            case 3:
-                storeMessage();
-                return "Message successfully stored.";
-            default:
-                return "Invalid option selected.";
-        }
-    }
-
-    // 7. Store Message as JSON File with Reference Attribution
-    public void storeMessage() {
-        // Reference Attribution: Standard Java File I/O for lightweight JSON output
-        String jsonContent = "{\n" +
-                "  \"messageId\": \"" + messageId + "\",\n" +
-                "  \"messageNumber\": " + messageNumber + ",\n" +
-                "  \"recipientCell\": \"" + recipientCell + "\",\n" +
-                "  \"messageText\": \"" + messageText + "\",\n" +
-                "  \"messageHash\": \"" + messageHash + "\"\n" +
-                "}";
-
-        try (FileWriter file = new FileWriter("message_" + messageId + ".json")) {
-            file.write(jsonContent);
-            file.flush();
-        } catch (IOException e) {
-            System.err.println("Error storing JSON file: " + e.getMessage());
-        }
-    }
-
-    // 8. Print Message Details Format
-    public String printMessages() {
-        return "Message ID: " + messageId +
-               "\nMessage Hash: " + messageHash +
-               "\nRecipient: " + recipientCell +
-               "\nMessage: " + messageText;
-    }
-
-    // Getters and Setters
-    public String getMessageId() { return messageId; }
-    public void setMessageId(String messageId) { this.messageId = messageId; }
-    public int getMessageNumber() { return messageNumber; }
-    public String getRecipientCell() { return recipientCell; }
-    public String getMessageText() { return messageText; }
-    public String getMessageHash() { return messageHash; }
 }
